@@ -152,8 +152,20 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return function Aboba(...args) {
+    let maxAttempts = 0;
+    while (maxAttempts < attempts) {
+      try {
+        return func(...args);
+      } catch (error) {
+        maxAttempts += 1;
+        if (maxAttempts === attempts) {
+          throw error;
+        }
+      }
+    }
+  };
 }
 
 /**
